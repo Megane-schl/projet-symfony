@@ -2,10 +2,53 @@
 
 {% block title %}Hello HelloWorldController!{% endblock %}
 
+
 {% block body %}
-<div class="example-wrapper">
+
+{% block header %}
+{# <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head> #} 
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+            <li class="nav-item d-flex justify-content-end">
+                <a class="nav-link d-flex justify-content-end" href="#">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">PokéDwwm</a>
+            </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+{% endblock %}
+
+
+<div class="example-wrapper text-center">
+
     <h1>Hello {{ controller_name }}! ✅</h1>
 
     <a href="" class="btn btn-success">Guigui♥</a>
+
+    <twig:BootstrapButton  class="my-2" text="Mystherbe" 
+    type="btn btn-success" 
+    link="#" />
+
+    <twig:BootstrapButton  text="ou 10 milliards de Lions ?" 
+    type="btn btn-warning" 
+    link="#" />
 </div>
+{% block footer %}
+<footer class="text-center py-5">
+    <small>	&#169; Dwwm - 2026</small>
+</footer>
 {% endblock %}
+
+{% endblock %}
+
+
