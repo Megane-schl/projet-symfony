@@ -17,7 +17,7 @@ class PokemonTypeCreateFormType extends AbstractType
             ->add('name')
             ->add('color', ColorType::class)
             ->add('submit', SubmitType::class)
-        ;
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

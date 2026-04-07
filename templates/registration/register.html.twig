@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+    <h1>Inscription</h1>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+    
+        {{ form_row(registrationForm.email) }}
+
+        <div class="row">
+            <div class="col">
+                {{ form_row(registrationForm.firstname) }}
+            </div>
+            
+            <div class="col">
+                {{ form_row(registrationForm.lastname) }}
+            </div>
+        </div>
+    
+        {{ form_row(registrationForm.birthdate) }}
+
+        {# Il est possible d'appeler le premier input puis le second d'un RepeatedType #}
+        <div class="row">
+            <div class="col">
+                {{ form_row(registrationForm.plainPassword.first) }}
+            </div>
+            <div class="col">
+                {{ form_row(registrationForm.plainPassword.second) }}
+            </div>
+        </div>
+
+        {{ form_row(registrationForm.agreeTerms) }}
+
+        {# On aurait pu l'intégrer dans le Formulaire TWIG comme pour les autres #}
+        <button type="submit" class="btn btn-danger">S'inscrire</button>
+
+    {{ form_end(registrationForm) }}
+{% endblock %}

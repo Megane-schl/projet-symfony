@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\PokemonType;
 use App\Repository\PokemonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PokemonRepository::class)]
 #[ORM\Table(name: 'pokemons')]
@@ -19,12 +21,20 @@ class Pokemon
     #[ORM\Column(name: 'pkm_name', length: 160)]
     private ?string $name = null;
 
+    #[Assert\Positive]
     #[ORM\Column(name: 'pkm_number', nullable: true, unique: true)]
     private ?int $number = null;
 
     /**
      * @var Collection<int, PokemonType>
      */
+
+    #[Assert\Count(
+        min: 1,
+        max: 2,
+        minMessage: 'Un Pokémon doit avoir au moins {{ limit }} type',
+        maxMessage: 'Un Pokémon ne peut pas avoir plus {{ limit }} types',
+    )]
     #[ORM\JoinTable('pokemon_pokemon_types')]
     #[ORM\JoinColumn(name: 'ppt_pkm_id', referencedColumnName: 'pkm_id')]
     #[ORM\InverseJoinColumn(name: 'ppt_pkt_id', referencedColumnName: 'pkt_id')]

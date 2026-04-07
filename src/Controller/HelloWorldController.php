@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use SebastianBergmann\Template\Template;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class HelloWorldController extends AbstractController
@@ -23,4 +26,18 @@ final class HelloWorldController extends AbstractController
         ]);
     }
 
+    #[Route('/mail', name: 'app_test_mail')]
+    public function sendMail(MailerInterface $mailer): Response
+    {
+        $email = (new TemplatedEmail)
+            ->from('hello@grisou.fr')
+            ->to('test@hotmail.fr')
+            ->subject('Pokémon Grisou')
+            ->text('Sending emails is fun again!') // FORMAT TEXT
+            ->html('<p>Grisouuuuuuuuuuuuuuuu BATON</p>');
+        $mailer->send($email); 
+
+        return $this->redirectToRoute('app_hello_world');
+
+    }
 }

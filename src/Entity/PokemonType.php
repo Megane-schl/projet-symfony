@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PokemonTypeRepository::class)]
 #[ORM\Table(name: 'pokemon_types')]
-
 class PokemonType
 {
     #[ORM\Id]
@@ -61,6 +60,23 @@ class PokemonType
         $this->color = $color;
 
         return $this;
+    }
+
+    /**
+     * Retourne la couleur du texte en fonction du fond
+     * Si le fond est clair, le texte doit être en noir, si le fond est foncé le texte doit être en blanc
+     * 
+     * @return string '#000000' ou '#FFFFFF'
+     */
+    public function getTextColor(): ?string
+    {
+        $hex = ltrim($this->color, '#');
+        [$r, $g, $b] = array_map('hexdec', str_split($hex, 2));
+
+        // Luminance relative (formule W3C)
+        $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+
+        return $luminance > 0.5 ? '#000000' : '#FFFFFF';
     }
 
     /**
