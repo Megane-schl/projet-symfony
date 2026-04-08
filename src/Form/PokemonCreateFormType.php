@@ -22,22 +22,15 @@ class PokemonCreateFormType extends AbstractType
             ])
 
             ->add('number', NumberType::class, [
-                'label' => 'Numéro du Pokédex national'
+                'label'     => 'Numéro du Pokédex nationnal',
+                'required'  => false,
             ])
 
             ->add('types', EntityType::class, [
-                'label'         => 'Type(s)',
-                'class'         => PokemonType::class, // la classe utilisée pour les choix
-                'choice_label'  => 'name',
-                'multiple'      => true
-                // 'constraints'   => [
-                //     new Count(
-                //         min: 1,
-                //         max: 2,
-                //         minMessage: 'Un Pokémon doit avoir au moins {{ limit }} type',
-                //         maxMessage: 'Un Pokémon ne peut pas avoir plus {{ limit }} types',
-                //     ),
-                // ],
+                'label'         => "Type(s)",
+                'class'         => PokemonType::class,  //< Classe utilisée pour les choix
+                'choice_label'  => 'name',              //< Attribut de l'objet utilisé pour le texte de l'option
+                'multiple'      => true,                //< Autorise la sélection multiple
             ])
 
             ->add('submit', SubmitType::class, [

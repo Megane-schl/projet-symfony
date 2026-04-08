@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\PokemonType;
 use App\Repository\PokemonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -28,18 +27,24 @@ class Pokemon
     /**
      * @var Collection<int, PokemonType>
      */
-
     #[Assert\Count(
         min: 1,
         max: 2,
-        minMessage: 'Un Pokémon doit avoir au moins {{ limit }} type',
-        maxMessage: 'Un Pokémon ne peut pas avoir plus {{ limit }} types',
+        minMessage: 'Un Pokémon doit avoir au moin {{ limit }} type',
+        maxMessage: 'Un Pokémon ne peut avoir plus de {{ limit }} types'
     )]
     #[ORM\JoinTable('pokemon_pokemon_types')]
     #[ORM\JoinColumn(name: 'ppt_pkm_id', referencedColumnName: 'pkm_id')]
     #[ORM\InverseJoinColumn(name: 'ppt_pkt_id', referencedColumnName: 'pkt_id')]
     #[ORM\ManyToMany(targetEntity: PokemonType::class, inversedBy: 'pokemons')]
     private Collection $types;
+
+    #[ORM\ManyToOne(inversedBy: 'pokemons', targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'pkm_created_by', referencedColumnName: 'usr_id', nullable: false)]  //< 1ère étape, il faut nullable:true
+    //< Ensuite faire la migration
+    //< Modifier les valeurs dans la table pokemons (pkm_created_by)
+    //< Passer le champ en nullable:false et refaire les migrations
+    private ?User $createdBy = null;
 
     public function __construct()
     {
@@ -95,6 +100,18 @@ class Pokemon
     public function removeType(PokemonType $type): static
     {
         $this->types->removeElement($type);
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }

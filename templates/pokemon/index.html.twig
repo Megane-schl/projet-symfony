@@ -1,35 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des Pokémons{% endblock %}
+{% block title %}Liste des Pokémons
+{% endblock %}
 
 {% block body %}
 
-    <div class="row mt-2">
-    {% for pokemon in pokemonList %}
+	{% if currentPage > 1 %}
+		<twig:BootstrapButton class="d-inline-block" text="Précédent" type="info" link="{{ path('app_pokemon_index', { page: currentPage - 1 }) }}"/>
+	{% endif %}
 
-        <twig:BootstrapCard 
-            class="col-3"
-            title="{{ pokemon.name }}"
-            img="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{ pokemon.number }}.png"
-            actions="{{ [
-                { label: 'Détails', link: path('app_pokemon_show', { id: pokemon.id }), type: 'info' },
-                { label: 'Modifier', link: path('app_pokemon_update', { id: pokemon.id }), type: 'warning' }
-            ] }}"
-        >
-        
-            <span class="badge text-bg-info rounded-pill">#{{ pokemon.number|fill_number('0', 3) }}</span>
+	<twig:BootstrapButton class="d-inline-block" text="Suivant" type="info" link="{{ path('app_pokemon_index', { page: currentPage + 1 }) }}"/>
 
-            {% for type in pokemon.types %}
+	<div class="row mt-2">
+		{% for pokemon in pokemonList %}
 
-            <span class="badge rounded-pill"
-                    style="background-color: {{ type.color }};">
-                {{ type.name }}
-            </span>
-            {% endfor %}
+			<twig:BootstrapCard class="col-3" title="{{ pokemon.name }}" img="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{ pokemon.number }}.png">
 
-        </twig:BootstrapCard>
+				<span class="badge text-bg-info rounded-pill">#{{ pokemon.number|fill_number('0', 3) }}</span>
 
-    {% endfor %}
-    </div>
+				{% for type in pokemon.types %}
+
+					<span class="badge rounded-pill" style="background-color: {{ type.color }}; color: {{ type.textColor }};">
+						{{ type.name }}
+					</span>
+				{% endfor %}
+
+				<div class="mt-2">
+
+					<twig:BootstrapButton
+					class="d-inline-block" text="Détails" type="info" link="{{ path('app_pokemon_show', { id: pokemon.id }) }}"/>
+
+					{# Si droit d'édition, on affiche le bouton #}
+					{% if is_granted('POKEMON_EDIT', pokemon) %}
+						<twig:BootstrapButton class="d-inline-block" text="Modifier" type="warning" link="{{ path('app_pokemon_update', { id: pokemon.id }) }}"/>
+					{% endif %}
+
+				</div>
+
+			</twig:BootstrapCard>
+
+		{% endfor %}
+	</div>
 
 {% endblock %}
