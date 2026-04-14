@@ -3,18 +3,35 @@
 {% block title %}Liste des Pokémons
 {% endblock %}
 
+{% block stylesheets %}
+	{{ knp_pagination_rel_links(pagination) }}
+{% endblock %}
+
 {% block body %}
 
-	{% if currentPage > 1 %}
-		<twig:BootstrapButton class="d-inline-block" text="Précédent" type="info" link="{{ path('app_pokemon_index', { page: currentPage - 1 }) }}"/>
-	{% endif %}
+	<form method="GET">
+		<div class="input-group mb-3">
+			<input type="text" class="form-control" placeholder="Rechercher par nom..." aria-label="Rechercher par nom..." name="search_name" id="search_name" value="{{ searchName }}">
 
-	<twig:BootstrapButton class="d-inline-block" text="Suivant" type="info" link="{{ path('app_pokemon_index', { page: currentPage + 1 }) }}"/>
+			<button class="btn btn-outline-secondary" type="button" id="button-addon1">
+				<i class="bi bi-search"></i>
+			</button>
+		</div>
+	</form>
 
-	<div class="row mt-2">
-		{% for pokemon in pokemonList %}
+	<div class="count mb-2">
+		{{ pagination.getTotalItemCount }}
+		Pokémon(s) trouvés !
+	</div>
 
-			<twig:BootstrapCard class="col-3" title="{{ pokemon.name }}" img="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{ pokemon.number }}.png">
+	<div class="navigation">
+		{{ knp_pagination_render(pagination) }}
+	</div>
+
+	<div class="row mt-2 g-2">
+		{% for pokemon in pagination %}
+
+			<twig:BootstrapCard class="col-2" title="{{ pokemon.name }}" img="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{ pokemon.number }}.png">
 
 				<span class="badge text-bg-info rounded-pill">#{{ pokemon.number|fill_number('0', 3) }}</span>
 
@@ -33,6 +50,15 @@
 					{# Si droit d'édition, on affiche le bouton #}
 					{% if is_granted('POKEMON_EDIT', pokemon) %}
 						<twig:BootstrapButton class="d-inline-block" text="Modifier" type="warning" link="{{ path('app_pokemon_update', { id: pokemon.id }) }}"/>
+					{% endif %}
+
+					{% if is_granted('POKEMON_DELETE', pokemon) %}
+						<form action="{{ path('app_pokemon_delete', { id: pokemon.id }) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr?');">
+
+							<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('delete-pokemon') }}">
+
+							<button class="btn btn-danger" type="submit">Supprimer</button>
+						</form>
 					{% endif %}
 
 				</div>

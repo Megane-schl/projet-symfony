@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use SebastianBergmann\Template\Template;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +14,10 @@ final class HelloWorldController extends AbstractController
     public function index(): Response
     {
         $arrPokemons = [
-            ['number' => 1, 'name' => 'Bulbizarre', 'type' => 'Plante' ],
-            ['number' => 2, 'name' => 'Salamèche', 'type' => 'Feu' ],
-            ['number' => 3, 'name' => 'Carapuce', 'type' => 'Eau' ],
-    ];
+            ['number' => 1, 'name' => 'Bulbizarre', 'type' => 'Plante'],
+            ['number' => 2, 'name' => 'Salamèche', 'type' => 'Feu'],
+            ['number' => 3, 'name' => 'Carapuce', 'type' => 'Eau'],
+        ];
 
         return $this->render('hello_world/index.html.twig', [
             'controller_name' => 'HelloWorldController',
@@ -35,9 +34,8 @@ final class HelloWorldController extends AbstractController
             ->subject('Pokémon Grisou')
             ->text('Sending emails is fun again!') // FORMAT TEXT
             ->html('<p>Grisouuuuuuuuuuuuuuuu BATON</p>');
-        $mailer->send($email); 
+        $mailer->send($email);
 
         return $this->redirectToRoute('app_hello_world');
-
     }
 }

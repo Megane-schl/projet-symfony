@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PictureController!
+{% endblock %}
+
+{% block body %}
+
+	<h1>Liste des photos enregistrées</h1>
+
+	<a href="{{ path('app_picture_create') }}" class="btn btn-danger">Envoyer une photo</a>
+
+	<div class="row gap-2 mt-5">
+
+		{% for picture in pictures %}
+
+			<div class="card col-2">
+				<img src="{{ asset('uploads/pictures/' ~ picture.filename) | imagine_filter('my_thumb') }}" class="card-img-top" alt="">
+				<div class="card-body">
+					<figure>
+						<blockquote class="blockquote">
+							<p>
+								{% if picture.pokemon %}
+									{{ picture.pokemon.name }}{% else %}(Pas de pokémon associé)
+								{% endif %}
+							</p>
+						</blockquote>
+						<figcaption
+							class="blockquote-footer">
+							{# Récupérer l'initial du nom : lastname|slice(0, 1) ou lastname|first #}
+							Prise par
+							{{ picture.takenBy.firstname }}
+							{{ picture.takenBy.lastname|first|upper }}.,
+							<cite title="Source Title">le
+								{{ picture.createdAt|date('d/m/Y') }}</cite>
+						</figcaption>
+					</figure>
+
+					<twig:BootstrapButton class="d-inline-block" text="Modifier" type="warning" link="{{ path('app_picture_update', { id: picture.id }) }}"/>
+
+					<form action="{{ path('app_picture_delete', { id: picture.id }) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr?');">
+
+						<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('delete-picture') }}">
+
+						<button class="btn btn-danger" type="submit">Supprimer</button>
+					</form>
+				</div>
+			</div>
+
+		{% endfor %}
+
+	</div>
+
+{% endblock %}
