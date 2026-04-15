@@ -1,9 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DashboardController!{% endblock %}
+{% block title %}Hello DashboardController!
+{% endblock %}
 
 {% block body %}
 
-{{  dump(app.current_route) }}
+	<h1>Tableau de bord</h1>
+
+	{% if app.user %}
+		<p>Bienvenue
+			{{ app.user.firstname }}, sur le Pokédex</p>
+		<p>
+		{% else %}
+			<p>Bienvenue sur le Pokédex</p>
+	{% endif %}
+
+	{{ dump(app.current_route) }}
 
 {% endblock %}

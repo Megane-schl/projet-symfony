@@ -6,6 +6,7 @@ import './stimulus_bootstrap.js';
  * which should already be in your base.html.twig.
  */
 
+import 'bootstrap';
 // import de bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@popperjs/core';
